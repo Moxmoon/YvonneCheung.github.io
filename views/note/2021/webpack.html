@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Webpack的理解及实现 | 路里</title>
+    <meta name="description" content=" ">
+    <link rel="icon" href="/img/avatar.png">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?79e91ea91fa15075e45c4c64afa75af0";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+        </script>
+    
+    <link rel="preload" href="/assets/css/0.styles.180f6287.css" as="style"><link rel="preload" href="/assets/js/app.5fc7d52d.js" as="script"><link rel="preload" href="/assets/js/6.6f411e29.js" as="script"><link rel="preload" href="/assets/js/1.4f04aef8.js" as="script"><link rel="preload" href="/assets/js/36.76ee83a5.js" as="script"><link rel="prefetch" href="/assets/js/10.972e6722.js"><link rel="prefetch" href="/assets/js/11.ea8149e0.js"><link rel="prefetch" href="/assets/js/12.daafa2ab.js"><link rel="prefetch" href="/assets/js/13.83589cb5.js"><link rel="prefetch" href="/assets/js/14.1890b1d1.js"><link rel="prefetch" href="/assets/js/15.84f03ba0.js"><link rel="prefetch" href="/assets/js/16.46188b6c.js"><link rel="prefetch" href="/assets/js/17.b1a9aa72.js"><link rel="prefetch" href="/assets/js/18.22edf71b.js"><link rel="prefetch" href="/assets/js/19.64cfa44c.js"><link rel="prefetch" href="/assets/js/2.ee718001.js"><link rel="prefetch" href="/assets/js/20.5b2e8881.js"><link rel="prefetch" href="/assets/js/21.d24a4dc3.js"><link rel="prefetch" href="/assets/js/22.0be58e4e.js"><link rel="prefetch" href="/assets/js/23.3e87458c.js"><link rel="prefetch" href="/assets/js/24.bd7a8603.js"><link rel="prefetch" href="/assets/js/25.befaa1c1.js"><link rel="prefetch" href="/assets/js/26.cd1cbd7a.js"><link rel="prefetch" href="/assets/js/27.8b1faa4b.js"><link rel="prefetch" href="/assets/js/28.42603ad5.js"><link rel="prefetch" href="/assets/js/29.69c7ab4b.js"><link rel="prefetch" href="/assets/js/3.09f4f0ce.js"><link rel="prefetch" href="/assets/js/30.a25f4342.js"><link rel="prefetch" href="/assets/js/31.d57d621c.js"><link rel="prefetch" href="/assets/js/32.f9683d96.js"><link rel="prefetch" href="/assets/js/33.88b1b5d5.js"><link rel="prefetch" href="/assets/js/34.caae9f9d.js"><link rel="prefetch" href="/assets/js/35.0983f39a.js"><link rel="prefetch" href="/assets/js/37.da97bca8.js"><link rel="prefetch" href="/assets/js/38.56bc6900.js"><link rel="prefetch" href="/assets/js/39.6cfbc93f.js"><link rel="prefetch" href="/assets/js/40.f3e69e5b.js"><link rel="prefetch" href="/assets/js/41.e75ea615.js"><link rel="prefetch" href="/assets/js/7.88764bef.js"><link rel="prefetch" href="/assets/js/8.d83403bd.js"><link rel="prefetch" href="/assets/js/9.49f64ed4.js"><link rel="prefetch" href="/assets/js/vendors~flowchart.9d1b0fcb.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.180f6287.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar" data-v-59111c2c><div data-v-59111c2c><div id="loader-wrapper" class="loading-wrapper" data-v-d48f4d20 data-v-59111c2c data-v-59111c2c><div class="loader-main" data-v-d48f4d20><div data-v-d48f4d20></div><div data-v-d48f4d20></div><div data-v-d48f4d20></div><div data-v-d48f4d20></div></div> <!----> <!----></div> <div class="password-shadow password-wrapper-out" style="display:none;" data-v-dedded5a data-v-59111c2c data-v-59111c2c><h3 class="title" style="display:none;" data-v-dedded5a data-v-dedded5a>路里</h3> <!----> <label id="box" class="inputBox" style="display:none;" data-v-dedded5a data-v-dedded5a><input type="password" value="" data-v-dedded5a> <span data-v-dedded5a>Konck! Knock!</span> <button data-v-dedded5a>OK</button></label> <div class="footer" style="display:none;" data-v-dedded5a data-v-dedded5a><span data-v-dedded5a><i class="iconfont reco-theme" data-v-dedded5a></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-dedded5a>vuePress-theme-reco</a></span> <span data-v-dedded5a><i class="iconfont reco-copyright" data-v-dedded5a></i> <a data-v-dedded5a><span data-v-dedded5a>路里</span>
+            
+          <span data-v-dedded5a>2019 - </span>
+          2023
+        </a></span></div></div> <div class="hide" data-v-59111c2c><header class="navbar index-header-transparent" data-v-59111c2c><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/img/avatar.png" alt="路里" class="logo"> <span class="site-name">路里</span></a> <div class="links"><div><audio controls="controls" loop="loop" hidden="hidden" preload><source src="/bgm/1.mp3"> <source src="/bgm/2.mp3"></audio> <a class="color-button"><i class="iconfont icon-play"></i></a></div> <div class="color-picker"><a class="color-button"><i class="iconfont icon-sun"></i></a></div> <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link"><i class="iconfont undefined"></i>
+  Home
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont undefined"></i>
+      Category
+    </span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/前端/" class="nav-link"><i class="iconfont undefined"></i>
+  前端
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Git/" class="nav-link"><i class="iconfont undefined"></i>
+  Git
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Node.js/" class="nav-link"><i class="iconfont undefined"></i>
+  Node.js
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Server/" class="nav-link"><i class="iconfont undefined"></i>
+  Server
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Notes/" class="nav-link"><i class="iconfont undefined"></i>
+  Notes
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Other/" class="nav-link"><i class="iconfont undefined"></i>
+  Other
+</a></li></ul></div></div><div class="nav-item"><a href="/tag/" class="nav-link"><i class="iconfont undefined"></i>
+  Tag
+</a></div><div class="nav-item"><a href="/friendLinks/" class="nav-link"><i class="iconfont undefined"></i>
+  Friends
+</a></div></nav></div></header> <div class="sidebar-mask" data-v-59111c2c></div> <aside class="sidebar" data-v-59111c2c><div class="personal-info-wrapper" data-v-cdc6bda8 data-v-59111c2c><img src="img/avatar.png" alt="author-avatar" class="personal-img" data-v-cdc6bda8> <h4 class="name" data-v-cdc6bda8>
+    路里
+  </h4> <h5 class="en-name" data-v-cdc6bda8>Yvonnecheung 🌸</h5> <div class="num" data-v-cdc6bda8><div data-v-cdc6bda8><h5 data-v-cdc6bda8>文章</h5> <h3 data-v-cdc6bda8>19</h3></div> <div data-v-cdc6bda8><h5 data-v-cdc6bda8>标签</h5> <h3 data-v-cdc6bda8>14</h3></div></div> <div class="links" data-v-cdc6bda8><a target="_blank" href="https://github.com/yvonnecheung" rel="noopener noreferrer" title="GitHub" class="link" data-v-cdc6bda8><svg aria-hidden="true" class="icon" data-v-cdc6bda8><use xlink:href="#icon-github" data-v-cdc6bda8></use></svg></a><a target="_blank" href="https://www.jianshu.com/u/75e71fb0e83c" rel="noopener noreferrer" title="简书" class="link" data-v-cdc6bda8><svg aria-hidden="true" class="icon" data-v-cdc6bda8><use xlink:href="#icon-jianshu" data-v-cdc6bda8></use></svg></a><a target="_blank" href="mailto:xixixixiao@hotmail.com" rel="noopener noreferrer" title="Email" class="link" data-v-cdc6bda8><svg aria-hidden="true" class="icon" data-v-cdc6bda8><use xlink:href="#icon-email" data-v-cdc6bda8></use></svg></a><a target="_blank" href="https://zhihu.com/people/xixixixiao" rel="noopener noreferrer" title="知乎" class="link" data-v-cdc6bda8><svg aria-hidden="true" class="icon" data-v-cdc6bda8><use xlink:href="#icon-zhihu" data-v-cdc6bda8></use></svg></a><a target="_blank" href="https://www.yuque.com/xixixixiao" rel="noopener noreferrer" title="语雀" class="link" data-v-cdc6bda8><svg aria-hidden="true" class="icon" data-v-cdc6bda8><use xlink:href="#icon-yuque" data-v-cdc6bda8></use></svg></a></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link"><i class="iconfont undefined"></i>
+  Home
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont undefined"></i>
+      Category
+    </span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/前端/" class="nav-link"><i class="iconfont undefined"></i>
+  前端
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Git/" class="nav-link"><i class="iconfont undefined"></i>
+  Git
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Node.js/" class="nav-link"><i class="iconfont undefined"></i>
+  Node.js
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Server/" class="nav-link"><i class="iconfont undefined"></i>
+  Server
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Notes/" class="nav-link"><i class="iconfont undefined"></i>
+  Notes
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Other/" class="nav-link"><i class="iconfont undefined"></i>
+  Other
+</a></li></ul></div></div><div class="nav-item"><a href="/tag/" class="nav-link"><i class="iconfont undefined"></i>
+  Tag
+</a></div><div class="nav-item"><a href="/friendLinks/" class="nav-link"><i class="iconfont undefined"></i>
+  Friends
+</a></div></nav> <!----> </aside> <div class="password-shadow password-wrapper-in" style="display:none;" data-v-dedded5a data-v-59111c2c><h3 class="title" style="display:none;" data-v-dedded5a data-v-dedded5a>Webpack的理解及实现</h3> <!----> <label id="box" class="inputBox" style="display:none;" data-v-dedded5a data-v-dedded5a><input type="password" value="" data-v-dedded5a> <span data-v-dedded5a>Konck! Knock!</span> <button data-v-dedded5a>OK</button></label> <div class="footer" style="display:none;" data-v-dedded5a data-v-dedded5a><span data-v-dedded5a><i class="iconfont reco-theme" data-v-dedded5a></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-dedded5a>vuePress-theme-reco</a></span> <span data-v-dedded5a><i class="iconfont reco-copyright" data-v-dedded5a></i> <a data-v-dedded5a><span data-v-dedded5a>路里</span>
+            
+          <span data-v-dedded5a>2019 - </span>
+          2023
+        </a></span></div></div> <div data-v-59111c2c><div><div class="page-header"><img src="/assets/img/bg2.6ea269e1.jpg" alt="" class="page-bg"></div> <main class="page"><div class="page-title" style="display:none;"><h1>Webpack的理解及实现</h1> <div class="flex page-info" data-v-59445f98><div class="desc-box" data-v-59445f98><div class="item date flex fxcenter" data-v-59445f98><svg aria-hidden="true" class="icon" data-v-59445f98><use xlink:href="#icon-calendar" data-v-59445f98></use></svg> <span data-v-59445f98>Feb 08, 2021</span></div> <div class="item tags flex fxcenter" data-v-59445f98><svg aria-hidden="true" class="icon" data-v-59445f98><use xlink:href="#icon-folder" data-v-59445f98></use></svg> <span class="tag-item" data-v-59445f98>前端</span></div> <div class="item tags flex fxcenter" data-v-59445f98><svg aria-hidden="true" class="icon" data-v-59445f98><use xlink:href="#icon-tags" data-v-59445f98></use></svg> <span class="tag-item" data-v-59445f98>webpack</span></div></div> <div class="visitor" data-v-59445f98><div class="item flex fxcenter" data-v-59445f98><svg aria-hidden="true" class="icon " data-v-59445f98><use xlink:href="#icon-comment" data-v-59445f98></use></svg> <span data-xid="/views/note/2021/webpack.html" class="valine-comment-count" data-v-59445f98></span></div> <div class="item flex fxcenter" data-v-59445f98><svg aria-hidden="true" class="icon " data-v-59445f98><use xlink:href="#icon-eye" data-v-59445f98></use></svg> <span id="/views/note/2021/webpack.html" data-flag-title="Your Article Title" class="leancloud-visitors" data-v-59445f98><a class="leancloud-visitors-count" style="font-size:.9rem;font-weight:normal;color:#999;"></a></span></div></div></div></div> <div class="theme-reco-content content__default" style="display:none;"><div class="custom-block tip"><p>Webapck 的实现原理，及打包过程</p></div> <h2 id="_1-webpack中的module是指什么？"><a href="#_1-webpack中的module是指什么？" class="header-anchor">#</a> 1. Webpack中的Module是指什么？</h2> <p>webpack 支持 <code>ESModule</code>, <code>CommonJS</code>, <code>AMD</code>, <code>Assets</code>.(image, font, video, audio, json)</p> <h4 id="_1-esm"><a href="#_1-esm" class="header-anchor">#</a> 1. ESM</h4> <h4 id="_2-commonjs"><a href="#_2-commonjs" class="header-anchor">#</a> 2. CommonJS</h4> <h3 id="所以webpack-modules-如何表达自己的各种依赖关系？"><a href="#所以webpack-modules-如何表达自己的各种依赖关系？" class="header-anchor">#</a> 所以webpack modules, 如何表达自己的各种依赖关系？</h3> <ul><li><p>ESM import 语句</p></li> <li><p>CommonJS require</p></li> <li><p>AMD define require</p></li> <li><p>css/sass/less @import.</p></li></ul> <h3 id="⭐️我们常说的-chunk-和-bundle-的区别是什么？"><a href="#⭐️我们常说的-chunk-和-bundle-的区别是什么？" class="header-anchor">#</a> ⭐️我们常说的 chunk 和 bundle 的区别是什么？</h3> <h4 id="_1-chunk"><a href="#_1-chunk" class="header-anchor">#</a> 1. Chunk</h4> <p>Chunk 是 webpack 打包过程中Modules的集合，是***打包过程中***的概念</p> <p>Webpack 的打包是一个入口模块开始，入口模块引用其他模块，其他模块引用其他模块……</p> <p>Webpack 通过引用关系逐个打包模块，这些module就形成了一个chunk.</p> <p>如果有多个入口模块，可能会产出多条打包路径。每条路径都会形成一个chunk.</p> <h4 id="_2-bundle"><a href="#_2-bundle" class="header-anchor">#</a> 2. Bundle</h4> <p>是我们最终输出的一个或者多个打包好的文件。</p> <h4 id="_3-chunk-和-bundle-的关系是什么？"><a href="#_3-chunk-和-bundle-的关系是什么？" class="header-anchor">#</a> 3. Chunk 和 Bundle 的关系是什么？</h4> <p>大多数情况下，一个chunk会生产一个bundle。但是也有例外。</p> <p>但是如果加了sourcemap，一个entry，一个chunk 对应两个bundle。</p> <p>Chunk 是过程中代码块，Bundle 是打包结果输出的代码块。Chunk在构建完成就呈现为Bundle。</p> <h4 id="_4-split-chunk"><a href="#_4-split-chunk" class="header-anchor">#</a> 4. Split Chunk</h4> <h4 id="_5-这段配置会产生几个chunk？"><a href="#_5-这段配置会产生几个chunk？" class="header-anchor">#</a> 5. 这段配置会产生几个Chunk？</h4> <blockquote><p>Runtime：在浏览器运行时，webpack用来连接模块化的应用程序的所有代码。runtime包含：在模块交互时，连接模块所需的加载和解析逻辑。包括浏览器中的已加载模块的连接，以及懒加载模块的执行逻辑。</p></blockquote> <div class="language-js extra-class"><pre class="language-js"><code>module<span class="token punctuation">.</span>export <span class="token operator">=</span> <span class="token punctuation">{</span>
+    mode<span class="token operator">:</span> <span class="token string">'production'</span><span class="token punctuation">,</span>
+    extry<span class="token operator">:</span> <span class="token punctuation">{</span>
+        index<span class="token operator">:</span> <span class="token string">'./src/index.js'</span><span class="token punctuation">,</span>
+        other<span class="token operator">:</span> <span class="token string">'./src/other.js'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    output<span class="token operator">:</span> <span class="token punctuation">{</span>
+        filename<span class="token operator">:</span> <span class="token string">'[name].js'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token comment">//devtool: 'source-map', //会产生sourcemap源文件</span>
+    optimization<span class="token operator">:</span> <span class="token punctuation">{</span>
+        runtimeChunk<span class="token operator">:</span> <span class="token string">'single'</span><span class="token punctuation">,</span>
+        splitChunk<span class="token operator">:</span> <span class="token punctuation">{</span>
+            cacheGroups<span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token comment">/**
+                 * 公共的chunk
+                 * minChunks——如果至少被2个模块用到，可以提取成一个公共的chunk
+                 * minSize——如果未达到最小的size，则不提取
+                 */</span>
+                commons<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    chunks<span class="token operator">:</span> <span class="token string">'initial'</span><span class="token punctuation">,</span>
+                    minChunks<span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+                    minSize<span class="token operator">:</span> <span class="token number">0</span> <span class="token comment">//不限制</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+                <span class="token comment">/**
+                 * 打包第三方包
+                 */</span>
+                vendor<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    test<span class="token operator">:</span> <span class="token regex">/node_modules/</span><span class="token punctuation">,</span><span class="token comment">//可正则匹配</span>
+                    chunks<span class="token operator">:</span> <span class="token string">'initial'</span><span class="token punctuation">,</span>
+                    name<span class="token operator">:</span> <span class="token string">'vendor'</span><span class="token punctuation">,</span>
+                    enforce<span class="token operator">:</span> <span class="token boolean">true</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+</code></pre></div><h3 id="plugin和loader分别是做什么的？怎么工作的？"><a href="#plugin和loader分别是做什么的？怎么工作的？" class="header-anchor">#</a> Plugin和Loader分别是做什么的？怎么工作的？</h3> <h4 id="_1-loader"><a href="#_1-loader" class="header-anchor">#</a> 1. Loader</h4> <blockquote><p>模块转换器，将非js模块转化为webpack能识别的js模块。</p> <p>本质上，webpack loader将所有类型的文件，转换为应用程序的<strong>依赖图</strong>可以直接引用的模块。</p></blockquote> <h4 id="_2-plugin"><a href="#_2-plugin" class="header-anchor">#</a> 2.  Plugin</h4> <blockquote><p>扩展插件，webpack 运行的各个阶段，都会广播出对应的事件，插件去监听对应的事件。</p></blockquote> <h4 id="_3-compiler"><a href="#_3-compiler" class="header-anchor">#</a> 3. Compiler</h4> <blockquote><p>是个对象，包含了webpack环境的所有配置信息。包括options loader,plugins.</p> <p>webpack 启动的时候实例化，它在全局是唯一的。可以把它理解为webpack的实例。</p></blockquote> <h4 id="_4-compliation"><a href="#_4-compliation" class="header-anchor">#</a> 4.  Compliation</h4> <blockquote><p>包含了当前的模块资源，编译生成资源。</p> <p>webpack 在开发模式下运行的时候，每当检测到一个文件变化，就会创建一次新的 Compliation.</p></blockquote> <h3 id="能简单描述一下webpack的打包过程吗？"><a href="#能简单描述一下webpack的打包过程吗？" class="header-anchor">#</a> 能简单描述一下webpack的打包过程吗？</h3> <h5 id="_1-初始化参数：shell-webpack-config-js"><a href="#_1-初始化参数：shell-webpack-config-js" class="header-anchor">#</a> 1. 初始化参数：shell webpack.config.js</h5> <h5 id="_2-开始编译：初始化一个compiler对象，加载所有的配置，开始执行编译"><a href="#_2-开始编译：初始化一个compiler对象，加载所有的配置，开始执行编译" class="header-anchor">#</a> 2. 开始编译：初始化一个Compiler对象，加载所有的配置，开始执行编译</h5> <h5 id="_3-确定入口：根据entry中的配置，找出所有的入口文件"><a href="#_3-确定入口：根据entry中的配置，找出所有的入口文件" class="header-anchor">#</a> 3. 确定入口：根据entry中的配置，找出所有的入口文件</h5> <h5 id="_4-编译模块：从入口文件开始，调用所有的loader，再去递归的找依赖"><a href="#_4-编译模块：从入口文件开始，调用所有的loader，再去递归的找依赖" class="header-anchor">#</a> 4. 编译模块：从入口文件开始，调用所有的loader，再去递归的找依赖</h5> <h5 id="_5-完成模块编译：得到每个模块被翻译后的最终内容以及它们之间的依赖关系（依赖图）"><a href="#_5-完成模块编译：得到每个模块被翻译后的最终内容以及它们之间的依赖关系（依赖图）" class="header-anchor">#</a> 5. 完成模块编译：得到每个模块被翻译后的最终内容以及它们之间的依赖关系（依赖图）</h5> <h5 id="_6-输出资源：根据得到的依赖关系，组装成一个个包含多个module的chunk"><a href="#_6-输出资源：根据得到的依赖关系，组装成一个个包含多个module的chunk" class="header-anchor">#</a> 6. 输出资源：根据得到的依赖关系，组装成一个个包含多个module的chunk</h5> <h5 id="_7-输出完成：根据配置，确定要输出的文件名以及文件路径"><a href="#_7-输出完成：根据配置，确定要输出的文件名以及文件路径" class="header-anchor">#</a> 7.输出完成：根据配置，确定要输出的文件名以及文件路径</h5> <h2 id="手写webpack打包工具"><a href="#手写webpack打包工具" class="header-anchor">#</a> 手写webpack打包工具</h2> <blockquote><p>本质上，webpack是一个现代js应用程序的静态模块打包器。</p> <p>当webpack处理应用程序的时候，它会递归的构建一个依赖关系图，其中包含应用程序需要的每个模块。然后将所有这些模块打包成一个或多个bundle。</p></blockquote> <h4 id="_1-esmodule"><a href="#_1-esmodule" class="header-anchor">#</a> 1. ESModule</h4> <h5 id="概览"><a href="#概览" class="header-anchor">#</a> 概览</h5> <ol><li>找到一个入口文件</li> <li>解析这个入口文件，提起他的依赖</li> <li>解析入口文件依赖的依赖，递归的去创建一个文件间的依赖图，描述所有文件的依赖关系</li> <li>把所有文件打包成一个文件</li></ol> <h5 id="步骤"><a href="#步骤" class="header-anchor">#</a> 步骤</h5> <ol><li><p>新建几个js源文件</p></li> <li><p>肉眼观察几个文件的依赖关系</p></li> <li><p>开始编写自己的打包工具</p></li> <li><p>分析AST，思考如何能够解析出依赖</p> <ul><li>File -&gt; program</li> <li>program -&gt; body 里面是我们各种语法的描述</li> <li>ImportDeclaration 引入的声明</li> <li>ImportDeclaration source 属性，source.value 就是引入文件的地址。</li></ul></li> <li><p>生成 AST</p> <p>babylon 一个基于babel的js解析工具。</p></li> <li><p>基于AST，找到文件的ImportDeclaration Node</p> <p>babel-traverse 可以像遍历对象一样遍历语法树。</p></li> <li><p>获取依赖</p></li> <li><p>优化createAsset，使其能够区分文件。</p> <p>因为要获取所有文件的依赖，所以咱们需要一个id来标识所有文件。</p> <p>这里咱们用一个简单的自增number，这样遍历的每个文件id就唯一了。</p> <p>先获取到文件的id filename 以及dependencies</p></li> <li><p>我们获取到单个文件的依赖了，接下来尝试建立依赖图</p> <p>新增一个函数createGraph，把createAsset调用移入creatGraph.</p> <p>文件的路径需要是动态的，所以createGraph接收一个参数entry</p></li> <li><p>上面存储的都是相对路径，想办法把他们转为绝对路径，有了绝对路径，我们才能获取到各个文件的asset</p></li> <li><p>我们需要一个map，记录depend中的相对路径 和 childAsset的对应关系。</p> <p>因为我们后面要做的依赖的引入，需要这样的一个对应关系。</p></li> <li><p>遍历所有文件</p></li> <li><p>依赖图完成后，新增一个方法bundle</p></li> <li><p>创建整体的结果代码（因为它需要接受参数，且需要立即执行，所以用一个自执行函数来包裹）</p> <p>自执行函数接收的参数是—module，是每一个文件模块</p></li> <li><p>编译源代码</p> <p>npm i babel-core</p> <p>npm i babel-preset-env 告诉babel转成什么格式</p></li> <li><p>把编译后的代码加入result中</p> <p>module变量代表当前模块，这个变量是一个对象</p> <p>它的exports属性是对外的接口，module.exports，加载某个模块，其实就是加载该模块的module.exports属性。</p> <p>require方法用于加载模块</p></li></ol> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> babylon <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'babylon'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> traverse <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'babel-traverse'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> babel <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'babel-core'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">let</span> <span class="token constant">ID</span> <span class="token operator">=</span> <span class="token number">0</span>
+
+<span class="token keyword">function</span> <span class="token function">createAsset</span><span class="token punctuation">(</span><span class="token parameter">filename</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> content <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">readFileSync</span><span class="token punctuation">(</span>filename<span class="token punctuation">,</span> <span class="token string">'utf-8'</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">const</span> ast <span class="token operator">=</span> babylon<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>content<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        sourceType<span class="token operator">:</span> <span class="token string">&quot;module&quot;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">const</span> dependencies <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token function">traverse</span><span class="token punctuation">(</span>ast<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        <span class="token function-variable function">ImportDeclaration</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> node <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span>
+            dependencies<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>source<span class="token punctuation">.</span>value<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">const</span> id <span class="token operator">=</span> <span class="token constant">ID</span><span class="token operator">++</span>
+
+    <span class="token comment">// 16.编译所有源代码</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span> code <span class="token punctuation">}</span> <span class="token operator">=</span> babel<span class="token punctuation">.</span><span class="token function">transformFromAst</span><span class="token punctuation">(</span>ast<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        presets<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'env'</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        id<span class="token punctuation">,</span> filename<span class="token punctuation">,</span> dependencies<span class="token punctuation">,</span> code
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">createGraph</span><span class="token punctuation">(</span><span class="token parameter">entry</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> mainAsset <span class="token operator">=</span> <span class="token function">createAsset</span><span class="token punctuation">(</span>entry<span class="token punctuation">)</span>
+    <span class="token keyword">const</span> allAsset <span class="token operator">=</span> <span class="token punctuation">[</span>mainAsset<span class="token punctuation">]</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> asset <span class="token keyword">of</span> allAsset<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> dirname <span class="token operator">=</span> path<span class="token punctuation">.</span><span class="token function">dirname</span><span class="token punctuation">(</span>asset<span class="token punctuation">.</span>filename<span class="token punctuation">)</span>
+
+        asset<span class="token punctuation">.</span>mapping <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+        asset<span class="token punctuation">.</span>dependencies<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">relativePath</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">const</span> absolutePath <span class="token operator">=</span> path<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span>dirname<span class="token punctuation">,</span> relativePath<span class="token punctuation">)</span>
+
+            <span class="token keyword">const</span> childAsset <span class="token operator">=</span> <span class="token function">creatAsset</span><span class="token punctuation">(</span>absolutePath<span class="token punctuation">)</span>
+
+            asset<span class="token punctuation">.</span>mapping<span class="token punctuation">[</span>relativePath<span class="token punctuation">]</span> <span class="token operator">=</span> childAsset<span class="token punctuation">.</span>id
+
+            allAsset<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>childAsset<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> allAsset
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">bundle</span><span class="token punctuation">(</span><span class="token parameter">graph</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> modules <span class="token operator">=</span> <span class="token string">''</span>
+
+    graph<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">module</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+        modules <span class="token operator">+=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>module<span class="token punctuation">.</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">:[
+             function(require,module,exports){
+                 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>module<span class="token punctuation">.</span>code<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">
+             }
+             </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>module<span class="token punctuation">.</span>mapping<span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">,
+        ],</span><span class="token template-punctuation string">`</span></span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// 实现 require 方法</span>
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+        (function(modules){
+            function require(id){
+                const [fn, mapping] = modules[id]
+                
+                function localRequire(relativePath){
+                    return require(mapping[relativePath])
+                }
+
+                const module = { exports: {} }
+                
+                fn(localRequire, module , module.exports)
+
+                return module.exports
+            }
+            require(0)
+        })(</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>modules<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">)
+        </span><span class="token template-punctuation string">`</span></span>
+
+    <span class="token keyword">return</span> result
+<span class="token punctuation">}</span>
+<span class="token keyword">const</span> graph <span class="token operator">=</span> <span class="token function">createGraph</span><span class="token punctuation">(</span><span class="token string">'./source/entry.js'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token function">bundle</span><span class="token punctuation">(</span>graph<span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>graph<span class="token punctuation">)</span>
+
+</code></pre></div></div> <footer class="page-edit" style="display:none;"><!----> <div class="last-updated"><span class="prefix">最后修改时间：</span> <span class="time">2022年2月17日  21:57:37</span></div></footer> <!----> <!----> <!----></main></div> <div class="footer-wrapper footer"><!----> <div>
+    Thanks for
+    <a target="blank" href="https://vuepress-theme-reco.recoluan.com">
+      vuepress-theme-reco@1.5.5</a></div></div></div></div></div></div><div class="global-ui"><div class="back-to-ceiling" style="right:1rem;bottom:6rem;width:2.5rem;height:2.5rem;border-radius:.25rem;line-height:2.5rem;display:none;" data-v-c6073ba8 data-v-c6073ba8><svg t="1574745035067" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5404" class="icon" data-v-c6073ba8><path d="M526.60727968 10.90185116a27.675 27.675 0 0 0-29.21455937 0c-131.36607665 82.28402758-218.69155461 228.01873535-218.69155402 394.07834331a462.20625001 462.20625001 0 0 0 5.36959153 69.94390903c1.00431239 6.55289093-0.34802892 13.13561351-3.76865779 18.80351572-32.63518765 54.11355614-51.75690182 118.55860487-51.7569018 187.94566865a371.06718723 371.06718723 0 0 0 11.50484808 91.98906777c6.53300375 25.50556257 41.68394495 28.14064038 52.69160883 4.22606766 17.37162448-37.73630017 42.14135425-72.50938081 72.80769204-103.21549295 2.18761121 3.04276886 4.15646224 6.24463696 6.40373557 9.22774369a1871.4375 1871.4375 0 0 0 140.04691725 5.34970492 1866.36093723 1866.36093723 0 0 0 140.04691723-5.34970492c2.24727335-2.98310674 4.21612437-6.18497483 6.3937923-9.2178004 30.66633723 30.70611158 55.4360664 65.4791928 72.80769147 103.21549355 11.00766384 23.91457269 46.15860503 21.27949489 52.69160879-4.22606768a371.15156223 371.15156223 0 0 0 11.514792-91.99901164c0-69.36717486-19.13165746-133.82216804-51.75690182-187.92578088-3.42062944-5.66790279-4.76302748-12.26056868-3.76865837-18.80351632a462.20625001 462.20625001 0 0 0 5.36959269-69.943909c-0.00994388-166.08943902-87.32547796-311.81420293-218.6915546-394.09823051zM605.93803103 357.87693858a93.93749974 93.93749974 0 1 1-187.89594924 6.1e-7 93.93749974 93.93749974 0 0 1 187.89594924-6.1e-7z" p-id="5405" data-v-c6073ba8></path><path d="M429.50777625 765.63860547C429.50777625 803.39355007 466.44236686 1000.39046097 512.00932183 1000.39046097c45.56695499 0 82.4922232-197.00623328 82.5015456-234.7518555 0-37.75494459-36.9345906-68.35043303-82.4922232-68.34111062-45.57627738-0.00932239-82.52019037 30.59548842-82.51086798 68.34111062z" p-id="5406" data-v-c6073ba8></path></svg></div></div></div>
+    <script src="/assets/js/app.5fc7d52d.js" defer></script><script src="/assets/js/6.6f411e29.js" defer></script><script src="/assets/js/1.4f04aef8.js" defer></script><script src="/assets/js/36.76ee83a5.js" defer></script>
+  </body>
+</html>
